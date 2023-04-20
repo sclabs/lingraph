@@ -18,11 +18,12 @@ query{
 
 PROJECTS_BY_TEAM_QUERY = """
 query {
-  projects {
+  projects(first: 250, filter: {state: {in: ["planned", "started"]}}) {
     nodes {
       id
       name
-      teams {
+      state
+      teams(first: 10) {
         nodes {
           key
           name
@@ -100,19 +101,21 @@ STATUS_STYLES = {
 
 @dataclass(eq=True, frozen=True)
 class Project:
+    """A project in Linear, which has a state."""
+
     id: str
     name: str
+    state: str
 
 
 @dataclass
 class Team:
-    """
-    A team in Linear, which contains a set of projects.
-    """
+    """A team in Linear, which contains a set of projects."""
 
     key: str
     name: str
-    projects: set[Project]
+    projects: dict[str, Project]
+    """A mapping from project id to Project for all projects in this team."""
 
 
 def get_user_email(session: OAuth2Session) -> str:
@@ -126,14 +129,23 @@ def get_user_email(session: OAuth2Session) -> str:
 def get_projects_by_team(session: OAuth2Session) -> dict[str, Team]:
     """
     Get a mapping from team keys to Teams, which include a set of projects.
+
+    Note that we are reversing the relationship between projects and teams
+    between our query (which returns projects, and then for each project a list
+    of teams) and what we're returning here (a list of teams, each of which has
+    a set of projects). This is because this works better with the pagination
+    and query complexity (we have > 100 projects but probably < 10 teams per
+    project).
     """
     response = session.post(LINEAR_API_URL, json={"query": PROJECTS_BY_TEAM_QUERY})
     teams = {}
     for project in response.json()["data"]["projects"]["nodes"]:
-        for team in project["teams"]["nodes"]:
+        # pop teams out of project since teams is not a field in Project
+        project_teams = project.pop("teams")
+        for team in project_teams["nodes"]:
             if team["key"] not in teams:
-                teams[team["key"]] = Team(team["key"], team["name"], set())
-            teams[team["key"]].projects.add(Project(project["id"], project["name"]))
+                teams[team["key"]] = Team(projects={}, **team)
+            teams[team["key"]].projects[project["id"]] = Project(**project)
     return teams
 
 
