@@ -50,7 +50,7 @@ def test_get_project_issue_diagram(client):
     assert (
         diagram
         == r"""flowchart LR
-    SCL-11[fa:fa-circle-notch <a href='https://linear.app/sclabs/issue/SCL-11/test'>SCL-11</a>\ntest]:::Todo
+    SCL-11["fa:fa-circle-notch <a href='https://linear.app/sclabs/issue/SCL-11/test'>SCL-11</a>\ntest"]:::Todo
     classDef Todo stroke:DarkGray,color:DarkGray
     classDef In_Progress stroke:DarkOrange,color:DarkOrange
     classDef Done stroke:DarkCyan,color:DarkCyan

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2023-04-20
+### Fixed
+- Bug where using certain characters like "[]" in an issue title or URL would
+  lead to a mermaid syntax error (fixed by double quoting the entire node
+  label).
+
 ## [0.0.3] - 2023-04-20
 ### Changed
 - Changed link hover color to dark cyan for readability and to match color

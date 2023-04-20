@@ -186,7 +186,7 @@ def get_project_issue_diagram(session: OAuth2Session, project_id: str) -> str:
         content = f"{icon} {id_link}\\n{title}"
 
         # add the node to the diagram
-        diagram += f"    {id}[{content}]:::{status}\n"
+        diagram += f'    {id}["{content}"]:::{status}\n'
 
         # make the node link to the issue
         # diagram += f'    click {id} "{url}" "{title}" _blank\n'
