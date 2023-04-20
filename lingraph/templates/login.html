@@ -1,0 +1,5 @@
+{% if logged_in %}
+logged in as {{ email }} | <a href="{{ url_for('logout') }}">logout</a>
+{% else %}
+<a href="{{ url_for('login') }}">login</a>
+{% endif %}

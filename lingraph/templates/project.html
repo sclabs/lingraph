@@ -1,0 +1,64 @@
+{% include "head.html" %}
+
+<body>
+    <div class="box">
+        <div class="header">
+            <h1>lingraph: {{ project_name }}</h1>
+            <p>
+                {% include "login.html" %} |
+                <a href="{{ url_for('root') }}">back to project list</a> |
+                <a id="mermaid-live-link" target="_blank">edit in mermaid live editor</a>
+            </p>
+        </div>
+        <div class="content">
+            <pre class="mermaid">
+                {{ graph }}
+            </pre>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        import { deflate, inflate } from 'https://cdn.jsdelivr.net/npm/pako@2.1.0/+esm';
+        import { fromUint8Array } from 'https://cdn.jsdelivr.net/npm/js-base64@3.7.5/+esm'
+        import svgPanZoom from 'https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/+esm';
+
+        // get code for diagram
+        var code = document.querySelector('pre').innerText;
+
+        // make state for mermaid live editor
+        var state = JSON.stringify({
+            code: code,
+            mermaid: JSON.stringify({ theme: 'default' }, undefined, 2),
+            autoSync: true,
+            updateDiagram: true
+        }, undefined, 2)
+
+        // serialize state
+        const data = new TextEncoder().encode(state);
+        const compressed = deflate(data, { level: 9 });
+        const pakoString = fromUint8Array(compressed, true);
+
+        // make link to mermaid live and make it the href of #mermaid-live-link
+        const link = "https://mermaid.live/edit#pako:" + pakoString;
+        document.querySelector('#mermaid-live-link').href = link;
+
+        // initialize mermaid
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+        // run and block until mermaid is done
+        await mermaid.run()
+
+        // add pan and zoom
+        var panZoom = svgPanZoom('.mermaid > svg', { controlIconsEnabled: true });
+
+        // add target=_blank to links in diagram
+        var links = document.querySelectorAll('.mermaid a');
+        for (var i = 0; i < links.length; i++) {
+            links[i].target = "_blank";
+        }
+    </script>
+</body>

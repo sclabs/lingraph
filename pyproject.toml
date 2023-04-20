@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lingraph"
+authors = [{ name = "Thomas Gilgenast", email = "thomasgilgenast@gmail.com" }]
+urls = { repository = "https://github.com/sclabs/lingraph" }
+description = "An OAuth2 Flask app to visualize linear issues"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "flask",
+    "requests",
+    "requests_oauthlib",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+lint = [
+    "black==23.3.0",
+    "ruff==0.0.262",
+]
+type = [
+    "mypy==1.2.0",
+]
+test = [
+    "pytest==7.3.1",
+]
+automation = [
+    "tox==4.4.12",
+    "tox-extras==0.0.1",
+]
+dev = [
+    "lingraph[lint,type,test,automation]",
+]
+
+[tool.ruff]
+select = ["E", "F", "W", "I"]
+
+[tool.mypy]
+ignore_missing_imports = true

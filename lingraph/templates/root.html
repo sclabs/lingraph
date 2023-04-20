@@ -1,0 +1,17 @@
+{% include "head.html" %}
+
+<body>
+    <h1>lingraph</h1>
+    <p>{% include "login.html" %}</p>
+    {% if logged_in %}
+    <h2>Your projects</h2>
+    {% for key, team in teams.items() %}
+    <h3>{{ team.name }}</h3>
+    <ul>
+        {% for project in team.projects %}
+        <li><a href="{{ url_for('project', project_id=project.id) }}">{{ project.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+    {% endif %}
+</body>

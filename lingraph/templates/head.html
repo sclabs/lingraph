@@ -1,0 +1,64 @@
+<head>
+    <title>lingraph</title>
+    <style>
+        /*html,
+        body {
+            background-color: black;
+            height: 100%;
+            margin: 0;
+        }*/
+
+        /* black background */
+        body {
+            background-color: black;
+        }
+
+        /* white monospace text elements */
+        a,
+        h1,
+        h2,
+        h3,
+        p,
+        pre,
+        ul {
+            font-family: monospace;
+            color: white;
+        }
+
+        /* don't underline links */
+        a {
+            text-decoration: none;
+        }
+
+        /* links turn blue on hover */
+        a:hover {
+            color: blue;
+        }
+
+        /* make a flex box */
+        /* see https://stackoverflow.com/a/24979148 */
+        .box {
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+        }
+
+        /* header shrinks to fit content but does not grow */
+        .box .header {
+            flex: 0 1 auto;
+        }
+
+        /* content fills remaining space */
+        .box .content {
+            flex: 1 1 auto;
+        }
+
+        /* container-type elements inside the content div should take height 100% */
+        .box .content pre,
+        .box .content svg {
+            min-width: 600px;
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
