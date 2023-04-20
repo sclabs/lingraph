@@ -9,7 +9,9 @@
     <h3>{{ team.name }}</h3>
     <ul>
         {% for project in team.projects %}
-        <li><a href="{{ url_for('project', project_id=project.id) }}">{{ project.name }}</a></li>
+        <li class="{{ project.state }}">
+            <a href="{{ url_for('project', project_id=project.id) }}">{{ project.name }}</a>
+        </li>
         {% endfor %}
     </ul>
     {% endfor %}
