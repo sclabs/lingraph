@@ -13,16 +13,25 @@ on:
 
 jobs:
   test:
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
-    with:
-      envs: |
-        - linux: lint
-          pytest: false
-        - linux: type
-          pytest: false
-        - linux: test
-          setenv: |
-            LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Cache tox
+        uses: actions/cache@v2
+        with:
+          path: .tox
+          key: tox-${{ hashFiles('pyproject.toml') }}
+      - name: Run tox
+        run: |
+          pip install tox tox-extras
+          tox
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
   docker:
     needs: [test]
     runs-on: ubuntu-latest
