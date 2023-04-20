@@ -8,7 +8,7 @@
     {% for key, team in teams.items() %}
     <h3>{{ team.name }}</h3>
     <ul>
-        {% for project in team.projects %}
+        {% for project in team.projects.values() %}
         <li class="{{ project.state }}">
             <a href="{{ url_for('project', project_id=project.id) }}">{{ project.name }}</a>
         </li>
